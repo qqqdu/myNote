@@ -33,4 +33,4 @@ onPullDownRefresh() {
 }
 ```
 效果如下：
-![image](./images/1.gjf)
+![image](./images/1.gif)
