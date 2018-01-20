@@ -1,0 +1,17 @@
+
+  <view class="container">
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>下拉刷新测试</view>
+      <view>{{getData}}</view>
+  </view>

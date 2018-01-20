@@ -1,0 +1,17 @@
+
+  <view class="container">
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>上拉加载测试</view>
+      <view>{{getData}}</view>
+  </view>
