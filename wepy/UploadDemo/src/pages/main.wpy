@@ -16,51 +16,53 @@
   }
 </style>
 <template>
-  <view class="container">
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>上拉加载测试</view>
-      <view>{{getData}}</view>
+  <view class="loading"></view>
+  <view class="container"  @touchmove="moveFn" @touchstart="startFn" @touchend="endFn">
+    <view style="top:{{top}}px;position:relative;" class="container-son">
+    <repeat for="{{list}}" key="index" index="index" item="item">
+        <view>{{ item }}<text>{{index}}</text></view>
+    </repeat>
+      
+      
+    </view>
   </view>
 </template>
 
 <script>
-  import wepy from 'wepy'
-  import List from '../components/list'
-  import Panel from '@/components/panel' // alias example
-  import Counter from 'counter' // alias example
-  import Group from '../components/group'
-  import Toast from 'wepy-com-toast'
-  import testMixin from '../mixins/test'
-
+import wepy from 'wepy'
+import 'wepy-async-function'
+// <view>{{ text }}</view>
+//       <view @tap="gotoTop">回到顶部</view>
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '上拉加载',
-      enablePullDownRefresh: false
+      enablePullDownRefresh: true
     }
     components = {
-      panel: Panel,
-      counter1: Counter,
-      counter2: Counter,
-      list: List,
-      group: Group,
-      toast: Toast
+
     }
 
-    mixins = [testMixin]
 
     data = {
-      getData: ''
+      getData: '',
+      top: 0,
+      lastTop: 0,
+      canDrag: false,
+      text: '',
+      maxTop: 50,
+      list: [ "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",
+              "数据",]
     }
 
     computed = {
@@ -68,7 +70,40 @@
     }
 
     methods = {
-      
+      moveFn(ev) {
+        let nowY = ev.changedTouches[0].clientY
+        nowY = nowY-this.lastTop
+        console.log(nowY)
+        if(nowY > 0 )
+          this.canDrag = false
+        console.log(this.canDrag, nowY)
+        if( nowY<=0 && this.canDrag ) {
+          this.top = nowY
+        }
+        if( -this.top>= this.maxTop  )
+          this.top = -this.maxTop
+      },
+      startFn(ev) {
+        this.lastTop = ev.changedTouches[0].clientY 
+      },
+      endFn() {
+        if(this.top <= -this.maxTop) {
+          this.text = "去请求数据了"
+          setTimeout(()=>{
+            this.text = "请求回来了"
+            this.canDrag = false
+            this.list.push(...["数据","数据","数据"])
+            this.$apply()
+            this.top = 0;
+            return
+          },1000)
+        }
+      },
+      gotoTop() {
+        wepy.pageScrollTo({
+          scrollTop: 0
+        })
+      }
     }
 
     events = {
@@ -79,8 +114,43 @@
       
     }
 
-    onPullDownRefresh() {
-     
+    onReachBottom() {
+     this.canDrag = true
+     console.log("触底了")
     }
   }
 </script>
+<style>
+  view {
+    display:block;
+    width:100%;
+    height:50px;
+    line-height:50px;
+    text-align:center;
+    border-bottom:1px solid red;
+  }
+  .container-son {
+    z-index:2;
+    position:relative;
+    background:white;
+    height:auto;
+  }
+  .loading {
+    width:40px;
+    height:40px;
+    border:1px solid black;
+    animation:loadings 1s linear infinite both;
+    position:fixed;
+    bottom:0;
+    left:50%;
+    margin-left:-20px;
+    z-index:1;
+    border-radius:50%;
+    border-bottom:1px solid red;
+  }
+  @keyframes loadings
+  {
+  from { transform:rotate(0deg); }
+  to {transform:rotate(360deg);}
+  }
+</style>
