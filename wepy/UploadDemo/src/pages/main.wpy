@@ -22,8 +22,6 @@
     <repeat for="{{list}}" key="index" index="index" item="item">
         <view>{{ item }}<text>{{index}}</text></view>
     </repeat>
-      
-      
     </view>
   </view>
 </template>

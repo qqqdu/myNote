@@ -5,7 +5,5 @@
     <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
         <view>{{ item }}<text>{{index}}</text></view>
     </block>
-      
-      
     </view>
   </view>
