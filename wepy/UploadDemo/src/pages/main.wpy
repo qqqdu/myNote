@@ -91,8 +91,9 @@ import 'wepy-async-function'
             this.text = "请求回来了"
             this.canDrag = false
             this.list.push(...["数据","数据","数据"])
-            this.$apply()
+            
             this.top = 0;
+            this.$apply()
             return
           },1000)
         }
@@ -109,12 +110,11 @@ import 'wepy-async-function'
     }
 
     onLoad() {
-      
+
     }
 
     onReachBottom() {
      this.canDrag = true
-     console.log("触底了")
     }
   }
 </script>

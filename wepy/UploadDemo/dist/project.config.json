@@ -30,7 +30,8 @@
 				{
 					"id": -1,
 					"name": "上拉加载",
-					"pathName": "pages/main"
+					"pathName": "pages/main",
+					"query": ""
 				}
 			]
 		}
