@@ -1,9 +1,21 @@
 
-  <view class="loading"/>
-  <view class="container" bindtouchmove="moveFn" bindtouchstart="startFn" bindtouchend="endFn">
-    <view style="top:{{top}}px;position:relative;" class="container-son">
-    <block wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
-        <view>{{ item }}<text>{{index}}</text></view>
+  <view class="loading _3b35595"/>
+  <view class="container _3b35595" bindtouchmove="moveFn" bindtouchstart="startFn" bindtouchend="endFn">
+    <view style="top:{{top}}px;position:relative;" class="container-son _3b35595">
+    <block class="_3b35595" wx:for="{{list}}" wx:for-index="index" wx:for-item="item" wx:key="index">
+        <view class="_3b35595">{{ item }}<text class="_3b35595">{{index}}</text></view>
     </block>
+    
+  <view class="counter {{$counter$style}} _3b35595">
+    <button bindtap="$counter$plus">  +  </button>
+    <text>{{ $counter$num }}</text>
+  </view>
+
+    
+  <view class="counter {{$counter$style}} _3b35595">
+    <button bindtap="$counter$plus">  +  </button>
+    <text>{{ $counter$num }}</text>
+  </view>
+
     </view>
   </view>

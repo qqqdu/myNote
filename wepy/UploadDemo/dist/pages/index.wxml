@@ -1,5 +1,5 @@
 
-  <view class="container">
+  <view class="container" bindtap="clickFn">
       <view>下拉刷新测试</view>
       <view>下拉刷新测试</view>
       <view>下拉刷新测试</view>

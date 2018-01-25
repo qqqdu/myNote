@@ -37,9 +37,17 @@ beforeUpdate| Y|N|\
 updated     | Y|N|\
 beforeDestroy| Y|N|\
 destroyed |Y|N|\
-onShow | N | Y | 页面显示时调用，使用场景后面会介绍
+onShow | N | Y | 页面显示时调用，执行顺序在onLoad之后，使用场景后面会介绍
 onLoad | N | Y | 页面加载时调用，在这里可以拿到路由参数
-
+### 全局属性
+ 属性 | Vue | WePy| 功能
+---|---|---|---|
+mixins | Y|Y | 基本相同，但 `WePy` 只混合data、components、events以及其它自定义方法，其他属性如 `computed` 不进行混合，如果父组件和 `mixins` 冲突（只要父组件定义了 `computed` ），则全部采用父组件的。
+computed  | Y|Y|相同
+watch   | Y|Y|相同
+methods    | Y|Y| `WePy` 的methods只是钩子事件，如 `Tap` `touchend` ...而如果要自定义方法，写在methods同层级就可以了。
+events    | N|Y| 通过$broadcast、$emit、$invoke所传递的事件的函数
+data    | Y|Y| 在 `.vue` 文件内写作返回对象的函数，在 `.wpy` 直接写为对象即可,这样就有一个问题？思考为什么 `vue` 要写成返回对象的函数
 
 
 

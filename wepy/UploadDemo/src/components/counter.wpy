@@ -13,12 +13,17 @@
       color: green;
     }
   }
+  text{
+    display: block;
+    width: 20px;
+    height: 20px;
+    float: left;
+  }
 </style>
 <template>
   <view class="counter {{style}}">
-    <button @tap="plus" size="mini">  +  </button>
-    <button @tap="minus" size="mini">  -  </button>
-    <text class="count" :class="{red: num > 55, green: num < 45}"> {{num}} </text>
+    <button @tap="plus" >  +  </button>
+    <text>{{ num }}</text>
   </view>
 </template>
 <script>
@@ -26,17 +31,8 @@
   // import abc from 'abc'
 
   export default class Counter extends wepy.component {
-    props = {
-      num: {
-        type: [Number, String],
-        coerce: function (v) {
-          return +v
-        },
-        default: 50
-      }
-    }
-
     data = {
+      num: 0
     }
     events = {
       'index-broadcast': (...args) => {
@@ -54,13 +50,6 @@
     methods = {
       plus () {
         this.num = this.num + 1
-        console.log(this.$name + ' plus tap')
-
-        this.$emit('index-emit', 1, 2, 3)
-      },
-      minus () {
-        this.num = this.num - 1
-        console.log(this.$name + ' minus tap')
       }
     }
   }
