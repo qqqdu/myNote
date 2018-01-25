@@ -24,8 +24,20 @@
     </repeat>
     </view>
   </view>
-</template>
-
+</template><!-- 
+等等，好像刚刚原生滚动实现的效果和滚动容器实现的稍有不同，你可以翻回去看看，原生滚动在手指离开屏幕之后，整体的位置瞬间重置到底部，但是滚动容器实现的，节点直接填充到空白位置。这是为什么呢？  
+其实这跟上面讲的原生滚动的其中一个缺点有关，原生滚动 `scrollTop`, 虽然微信官方提供了设置全局 `scrollTop` 的方法，但还存在几个问题。  
+文档里就这四行示例代码  
+```javascript
+wx.pageScrollTo({
+  scrollTop: 0,
+  duration: 300
+})
+```  
+- 滚动的过程默认动画，并且不能更改（这个是多次设置了duration的值之后发现的）  
+- 基础库 1.4.0 开始支持
+- `scrollTop` 的单位有问题
+在滚动容器实现中，手指离开屏幕之后会计算一次 `scrollTop`, 让节点停在正确的位置，而在原生滚动实现中，主要还是因为默认的动画实在太难受。这 -->
 <script>
 import wepy from 'wepy'
 import 'wepy-async-function'
