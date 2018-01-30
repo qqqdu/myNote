@@ -1,0 +1,81 @@
+<style lang="less">
+  
+</style>
+<template>
+  <repeat for="{{myName}}" key="index" item="item">
+    <sendData :propsData.async="item"></sendData>
+  </repeat>
+  <secondProps :myData.async="myData"></secondProps>
+</template>
+
+
+
+<style lang="css" scoped>
+</style>
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+import sendData from '../components/sendData'
+import secondProps from '../components/secondProps'
+// <view>{{ text }}</view>
+//       <view @tap="gotoTop">回到顶部</view>
+  export default class Index extends wepy.page {
+
+    components = {
+      sendData,
+      secondProps
+    }
+
+    data = {
+      myName: [{
+          key: 1,
+          name: 'duhao1'
+        },{
+          key: 2,
+          name: 'duhao2'
+        },{
+          key: 3,
+          name: 'duhao3'
+        }],
+      myData: {
+        data : 2
+      }
+    }
+
+    
+  }
+</script>
+<style>
+  view {
+    display:block;
+    width:100%;
+    height:50px;
+    line-height:50px;
+    text-align:center;
+    border-bottom:1px solid red;
+  }
+  .container-son {
+    z-index:2;
+    position:relative;
+    background:white;
+    height:auto;
+  }
+  .loading {
+    width:40px;
+    height:40px;
+    border:1px solid black;
+    animation:loadings 1s linear infinite both;
+    position:fixed;
+    bottom:0;
+    left:50%;
+    margin-left:-20px;
+    z-index:1;
+    border-radius:50%;
+    border-bottom:1px solid red;
+  }
+  @keyframes loadings
+  {
+  from { transform:rotate(0deg); }
+  to {transform:rotate(360deg);}
+  }
+</style>

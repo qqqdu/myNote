@@ -1,0 +1,22 @@
+<style lang="less">
+  
+</style>
+<template>
+  <view class="panel">
+      <button @tap="sendProps"> {{ propsData }}</button>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class Panel extends wepy.component {
+    props = ['propsData']
+
+    methods = {
+      sendProps() {
+        // 这里取到的值是 `undefined`
+        console.log(this.propsData)
+      }
+    }
+  }
+</script>

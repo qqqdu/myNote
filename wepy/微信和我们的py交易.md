@@ -26,6 +26,32 @@
 - `app.wpy` 中配置全局信息，`pages` 内部页面配置各自局部信息。
 
 ## `WePy` 与 `Vue` 不同之处  
+```
+//index.wpy中的<script>部分
+
+import wepy from 'wepy';
+
+//通过继承自wepy.page的类创建页面逻辑
+export default class Index extends wepy.page {
+    //可用于页面模板绑定的数据
+    data = {
+        motto: 'Hello World',
+        userInfo: {}
+    };
+
+    //事件处理函数(集中保存在methods对象中)
+    methods = {
+        bindViewTap () {
+            console.log('button clicked');
+        }
+    };
+
+    //页面的生命周期函数
+    onLoad() {
+        console.log('onLoad');
+    };
+}
+```
 ### 全局钩子
 
 钩子函数 | Vue | WePy| 功能
@@ -49,26 +75,90 @@ methods    | Y|Y| `WePy` 的methods只是钩子事件，如 `Tap` `touchend` ...
 events    | N|Y| 通过$broadcast、$emit、$invoke所传递的事件的函数
 data    | Y|Y| 在 `.vue` 文件内写作返回对象的函数，在 `.wpy` 直接写为对象即可,这样就有一个问题？思考为什么 `vue` 要写成返回对象的函数
 
+## 细数遇到的坑  
+- **善用 $apply**
+- **使用repeat 的注意事项**
+- **父组件二级参数传递**
+- **mixins 混合功能有限**
+- **wxParse OR richText**
+- **微信文档里搜索不出来的路由栈**
 
+### 善用 $apply `(wepy)`   
+这个问题前期经常会用到，请求明明回来了，也修改了数据，但视图层就没没更新。最后在文档的最后面找到了原因。  
+引用自 WePY 文档  
+>WePY数据绑定方式
+>WePY使用脏数据检查对setData进行封装，在函数运行周期结束时执行脏数据检查，一来可以不用关心页面多次setData是否会有性能上的问题，二来可以更加简洁去修改数据实现绑定，不用重复去写setData方法。代码如下：  
+>```this.title = 'this is title';```
 
+>但需注意，在函数运行周期之外的函数里去修改数据需要手动调用$apply方法。如：
+>
+>```
+>setTimeout(() => {
+>    this.title = 'this is title';
+>    this.$apply();
+>}, 3000);
+>```
+所以在生命周期外改变 `data` 的时候，需调用 `$apply` 方法重新检查数据。  
+### 使用repeat 的注意事项  `(wepy)`  
+ ***申明，WePy的维护者1.x版本不建议repeat中使用 `computed` 和 `props`***
+#### 子组件拿不到父组件传入的二级属性  
+### 父组件二级参数传递 `(wepy)`  
 
+### mixins 混合功能有限  `(wepy)`
+`mixins` 混合 `computed` 时，当父组件存在 `computed`，即使 `computed` 为空，`mixins` 内部的 `computed` 也会完全失效。因此在 `mixins` 内部慎用 `computed`。  
+我们的做法是 mixins 最终在每个调用的组件里重写一份 `computed`。
 
+### wxParse OR richText  
+在微信小程序里会遇到填充后台返回的 富文本 需求，因为微信小程序里面无法动态填充节点，所以要实现这个需求还是有些麻烦。在小程序低版本(基础库 < 1.4.0),可以选择 `wxParse` 这个库。而现在可以选择 `richText ` 组件。  
+首先可以看看 `wxParse` 支持什么标签。  
+>wxParse
+>## 特性
 
+>| 支持特性        | 实验功能           | ToDo  |
+>| ------------- |-------------| -----|
+>| - [x] HTML的大部分标签解析 | [x] 小表情emjio | [x] table标签 |
+>| - [x] 内联style          | [x] a标签跳转   |               |
+>| - [x] 标签Class          | [x] 动态添加    |               |
+>| - [x] 图片自适应规则       |               |                |
+>| - [x] 图片多图片预览      |                |               |
+>| - [x] 模版层级可扩展性    |                |               |
+>| - [x] 多数据循环方式      |                |  |
+>| - [x] 内联style         |                |   |
+>|         |                |   |  
+可以看到，暂时不支持 `tabel` 标签，如果你的富文本里包含tabel标签的话，不会被解析，而会被过滤掉。  
+如果你用的是 `WePy` 的话，[戳这里](https://github.com/icindy/wxParse/issues/57)  
+关于 `richText`也不过多赘述，官方文档讲的很清楚[戳这里](https://mp.weixin.qq.com/debug/wxadoc/dev/component/rich-text.html)，列举一下 `richText` 的痛点吧。  
+调用形如：  
 
+```<rich-text nodes="{{nodes}}" bindtap="tap"></rich-text>```  
 
-
-
-
-
-
-
-
-
-
+其中 `nodes` 类型为 `Array` 或者 `String`, 并且推荐用 `Array`， `String` 不用解释，字符串模板，可为什么可以传入 `Array` 对象？  
+原来即使你传入 模板字符串最终也会被转为 `Array` 对象的。其形如：  
 ```
-遇到的坑：  
-返回页面传递数据  
-repeat各种坑  
-mixins 中的 computed 不能混合  
-插入富文本标签
-```
+nodes: [{
+      name: 'div',
+      attrs: {
+        class: 'div_class',
+        style: 'line-height: 60px; color: red;'
+      },
+      children: [{
+        type: 'text',
+        text: 'Hello&nbsp;World!'
+      }]
+    }]
+```  
+所以，这就对你的字符串模板严格起来，比如不能出现 未闭合标签，不能出现不支持的属性...总之你的标签必须是标准的，否则解析出来标签会失踪，甚至报错，导致 `rich-text` 内容为空。  
+我们在实际开发中也遇到了后台返回的富文本不标准的问题，最后是写了正则表达式，过滤掉了一些不标准字符。  
+```javascript
+import wepy from 'wepy'
+
+export default class HtmlFilterMixin extends wepy.mixin {
+  htmlFilter(htmlStr) {
+    return htmlStr.replace(/<(table|td|th)/ig, '<$1 class="$1"')
+      .replace(/\s+(?:"|')[^<]*?(?=>)/ig, '')
+      .replace(/(\n|\r\n)/g, '<br>')
+  }
+}
+```  
+**总结一下二者如何取舍，如果你的富文本里没有 `tabel` 标签，或者 `table` 标签不重要 ,如果你可以忍受 `wxParse` 包的大小(模板+js资源=138k)，那就可以用 `wxParse`。**
+**如果你必须要填充 `table`,你的标签在可控范围内（能被正确解析成json），并且目标平台小程序基础库(>=1.4.0),那么你就可以用`rich-text`**

@@ -25,13 +25,18 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 0,
+			"current": 1,
 			"list": [
 				{
 					"id": -1,
 					"name": "上拉加载",
 					"pathName": "pages/main",
 					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "text",
+					"pathName": "pages/text"
 				}
 			]
 		}
