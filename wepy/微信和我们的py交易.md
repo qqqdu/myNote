@@ -162,3 +162,36 @@ export default class HtmlFilterMixin extends wepy.mixin {
 ```  
 **总结一下二者如何取舍，如果你的富文本里没有 `tabel` 标签，或者 `table` 标签不重要 ,如果你可以忍受 `wxParse` 包的大小(模板+js资源=138k)，那就可以用 `wxParse`。**
 **如果你必须要填充 `table`,你的标签在可控范围内（能被正确解析成json），并且目标平台小程序基础库(>=1.4.0),那么你就可以用`rich-text`**
+## 子页面返回传递参数给父页面（小程序）  
+这个需求是从子页面返回父页面时，传值给父页面。效果如下：  
+![image](./images/6.gif)  
+猜想解决方法：  
+1. 在子页面使用 `navigateTo` 或者 `redirectTo` 这种跳转方法，带上传递的参数，在父页面 `onLoad` 的时候获取路由参数。这样显然是不行的。因为 `onLoad` 只会在创建之初调用一次，有子页面的时候父页面早就创建好了，所以 `onLoad` 就不会执行了。  
+2. 全局 `state`，这种方法不好管理。  
+3. 在翻遍了微信小程序文档后，也没找到解决方法，直到帖子里看见 `getCurrentPages` 方法。 `可通过 getCurrentPages()获取当前的页面栈`。  
+### `getCurrentPages` 解决子页面传值父页面
+如何做呢？首先看子页面：  
+```
+trunBack(ev) {
+  let location = dataset.areaid
+  let locationText = dataset.name
+  let pages = getCurrentPages()
+  let prevPage = pages[pages.length - 2] // 父页面
+  prevPage.data.location = location
+  prevPage.data.locationText = locationText
+  wepy.navigateBack()
+}
+```
+父页面：  
+```
+onShow() {
+  let pages = getCurrentPages()
+  let prevPage = pages[pages.length - 1]
+  console.log(prevPage, this)
+  if (prevPage) {
+    // 重新赋值一次
+    this.changeLocation(prevPage.data.location, prevPage.data.locationText)
+  }
+}
+```  
+在子页面获取到路由栈后，直接修改父页面内部的 `data`，发现视图没有更新，分别打印出路由栈里面的当前页面 和 当前 `this` ，发现路由栈里存储的对象并不是 `this`，因此在父页面又写了 `onShow` 钩子函数，取出路由栈属性，重新赋值一次。
