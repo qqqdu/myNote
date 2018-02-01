@@ -47,9 +47,8 @@ onPullDownRefresh() {
   <view class="container"  
         @touchmove="moveFn" 
         @touchstart="startFn" 
-        @touchend="endFn">
-    <view style="top:{{top}}px;position:relative;" 
-          class="container-son">
+        @touchend="endFn"
+        style="top:{{top}}px;position:relative;">
     <repeat for="{{list}}" 
             key="index" 
             index="index" 
@@ -57,7 +56,6 @@ onPullDownRefresh() {
         <view>{{ item }}<text>{{index}}</text></view>
     </repeat>
     </view>
-  </view>
 </template>
 ```
 钩子函数
