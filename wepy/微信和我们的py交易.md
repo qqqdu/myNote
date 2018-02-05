@@ -125,8 +125,8 @@ data    | Y|Y| 在 `.vue` 文件内写作返回对象的函数，在 `.wpy` 直�
 >| - [x] 多数据循环方式      |                |  |
 >| - [x] 内联style         |                |   |
 >|         |                |   |  
-可以看到，暂时不支持 `tabel` 标签，如果你的富文本里包含tabel标签的话，不会被解析，而会被过滤掉。  
-如果你用的是 `WePy` 的话，[戳这里](https://github.com/icindy/wxParse/issues/57)  
+可以看到，暂时不支持 `table` 标签，如果你的富文本里包含table标签的话，不会被解析，而会被过滤掉。  
+如果你想在 `WePy` 里使用 `wxParse` 的话，[戳这里](https://github.com/icindy/wxParse/issues/57)  
 关于 `richText`也不过多赘述，官方文档讲的很清楚[戳这里](https://mp.weixin.qq.com/debug/wxadoc/dev/component/rich-text.html)，列举一下 `richText` 的痛点吧。  
 调用形如：  
 
